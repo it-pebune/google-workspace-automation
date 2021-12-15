@@ -1,11 +1,11 @@
-const COMPLAINTS_DATA_SHEET_ID = "19m_2MobG1DH3P_4ZgFsJzFuaXrseEEogybDy7nOIrCU";
 const COMPLAINT_TEMPLATE_DOC_ID =
   "1fikjAhpgH3QdAnVhssiqlZ1u5fDOvZKsmSiOdE_67HQ";
 const COMPLAINTS_FOLDER_ID = "1S0wA-5a66Glrg_a8sRUQIV3APm30Ym-_";
 
-const complaintsDataSheet = SpreadsheetApp.openById(COMPLAINTS_DATA_SHEET_ID);
 const complaintTemplateDoc = DriveApp.getFileById(COMPLAINT_TEMPLATE_DOC_ID);
 const complaintsFolder = DriveApp.getFolderById(COMPLAINTS_FOLDER_ID);
+
+const complaintsDataSheet = SpreadsheetApp.getActiveSpreadsheet();
 
 function addComplaints() {
   // Get the first sheet
