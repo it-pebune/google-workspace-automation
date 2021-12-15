@@ -1,9 +1,8 @@
-const COMPLAINT_TEMPLATE_DOC_ID =
-  "1fikjAhpgH3QdAnVhssiqlZ1u5fDOvZKsmSiOdE_67HQ";
-const COMPLAINTS_FOLDER_ID = "1S0wA-5a66Glrg_a8sRUQIV3APm30Ym-_";
+const complaintTemplateDocId = "1fikjAhpgH3QdAnVhssiqlZ1u5fDOvZKsmSiOdE_67HQ";
+const complaintsFolderId = "1S0wA-5a66Glrg_a8sRUQIV3APm30Ym-_";
 
-const complaintTemplateDoc = DriveApp.getFileById(COMPLAINT_TEMPLATE_DOC_ID);
-const complaintsFolder = DriveApp.getFolderById(COMPLAINTS_FOLDER_ID);
+const complaintTemplateDoc = DriveApp.getFileById(complaintTemplateDocId);
+const complaintsFolder = DriveApp.getFolderById(complaintsFolderId);
 
 const complaintsDataSheet = SpreadsheetApp.getActiveSpreadsheet();
 
@@ -14,23 +13,26 @@ function addComplaints() {
   const data = sheet.getDataRange().getValues();
   // Iterate data rows
   data.forEach((row, index) => {
-    const isHeaderRow = index === 0;
-    const isEmptyRow = row[0] === "";
-    const complaintLinkCell = sheet.getRange("S" + (index + 1));
-    const hasComplaint = complaintLinkCell.getValue() !== "";
-
-    if (!isHeaderRow && !isEmptyRow && !hasComplaint) {
-      addComplaint(row, complaintLinkCell);
+    if (hasNoComplaint(sheet, row, index)) {
+      addComplaint(sheet, row, index);
     }
   });
 }
 
-function addComplaint(row, complaintLinkCell) {
+function hasNoComplaint(sheet, row, index) {
+  const isHeaderRow = index === 0;
+  const isEmptyRow = row[0] === "";
+  const complaintLinkCell = sheet.getRange("S" + (index + 1));
+  const hasComplaint = complaintLinkCell.getValue() !== "";
+  return !isHeaderRow && !isEmptyRow && !hasComplaint;
+}
+
+function addComplaint(sheet, row, index) {
   const complaintDoc = createComplaintDoc(row);
 
   fillInComplaintDoc(complaintDoc, row);
 
-  addLinktoComplaintDoc(complaintLinkCell, complaintDoc);
+  addLinktoComplaintDoc(sheet, index, complaintDoc);
 }
 
 function createComplaintDoc(row) {
@@ -109,7 +111,8 @@ function removeEnclosingParagraph(docContents, placeholder) {
     .removeFromParent();
 }
 
-function addLinktoComplaintDoc(complaintLinkCell, complaintDoc) {
+function addLinktoComplaintDoc(sheet, index, complaintDoc) {
+  const complaintLinkCell = sheet.getRange("S" + (index + 1));
   complaintLinkCell.setValue(complaintDoc.getUrl());
 
   Logger.log("ADDED LINK TO COMPLAINT: " + complaintDoc.getUrl());
