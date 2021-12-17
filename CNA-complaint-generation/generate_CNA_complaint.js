@@ -1,10 +1,17 @@
 const complaintTemplateDocId = "1fikjAhpgH3QdAnVhssiqlZ1u5fDOvZKsmSiOdE_67HQ";
 const complaintsFolderId = "1S0wA-5a66Glrg_a8sRUQIV3APm30Ym-_";
 
-const complaintTemplateDoc = DriveApp.getFileById(complaintTemplateDocId);
-const complaintsFolder = DriveApp.getFolderById(complaintsFolderId);
-
 const complaintsDataSheet = SpreadsheetApp.getActiveSpreadsheet();
+
+/**
+ * A special function that runs when the spreadsheet is open.
+ * Adds a custom menu to the spreadsheet.
+ */
+function onOpen() {
+  complaintsDataSheet.addMenu("SESIZĂRI", [
+    { name: "GENEREAZĂ SESIZĂRILE LIPSĂ", functionName: "addComplaints" },
+  ]);
+}
 
 function addComplaints() {
   // Get the first sheet
@@ -51,6 +58,15 @@ function createComplaintDoc(row) {
     Session.getScriptTimeZone(),
     "yyyyMMdd_HHmmss"
   );
+
+  // Cannot be declared globally because the simple trigger 'onOpen()'
+  // cannot access services that require authorization (simple triggers
+  // get fired automatically, without asking the user for authorization),
+  // so it has no permission to call 'DriveApp.getFileById'.
+  //
+  // See https://developers.google.com/apps-script/guides/triggers#restrictions
+  const complaintTemplateDoc = DriveApp.getFileById(complaintTemplateDocId);
+  const complaintsFolder = DriveApp.getFolderById(complaintsFolderId);
 
   const complaintDoc = complaintTemplateDoc.makeCopy(
     channel + "-" + broadcast + "-" + time + "-" + createdAt,
