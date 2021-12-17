@@ -1,4 +1,4 @@
-Google Workspace automation
+# Google Workspace automation
 
 ## Apps Script
 
