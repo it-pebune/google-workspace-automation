@@ -1,5 +1,5 @@
-const complaintTemplateDocId = "1fikjAhpgH3QdAnVhssiqlZ1u5fDOvZKsmSiOdE_67HQ";
-const complaintsFolderId = "1S0wA-5a66Glrg_a8sRUQIV3APm30Ym-_";
+const complaintTemplateDocId = "1tJqrIcN2z2e6wgg5b6d-XlLfn9EMmi_exCnzF6zvkTA";
+const complaintsFolderId = "1xwtW6YTvqkul8YBYVasP2sOIcCg8zbfU";
 
 const complaintsDataSheet = SpreadsheetApp.getActiveSpreadsheet();
 
