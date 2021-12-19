@@ -1,21 +1,22 @@
 const complaintTemplateDocId = "1tJqrIcN2z2e6wgg5b6d-XlLfn9EMmi_exCnzF6zvkTA";
 const complaintsFolderId = "1xwtW6YTvqkul8YBYVasP2sOIcCg8zbfU";
 
-const complaintsDataSheet = SpreadsheetApp.getActiveSpreadsheet();
-
 /**
  * A special function that runs when the spreadsheet is open.
- * Adds a custom menu to the spreadsheet.
  */
 function onOpen() {
-  complaintsDataSheet.addMenu("SESIZĂRI", [
+  createCustomMenu();
+}
+
+function createCustomMenu() {
+  SpreadsheetApp.getActive().addMenu("SESIZĂRI", [
     { name: "GENEREAZĂ SESIZĂRILE LIPSĂ", functionName: "addComplaints" },
   ]);
 }
 
 function addComplaints() {
   // Get the first sheet
-  const sheet = complaintsDataSheet.getSheets()[0];
+  const sheet = SpreadsheetApp.getActive().getSheets()[0];
   // Get all data
   const data = sheet.getDataRange().getValues();
   // Iterate data rows
@@ -48,7 +49,7 @@ function createComplaintDoc(row) {
   // the time zone used for reading and the time zone of the spreadsheet
   const time = Utilities.formatDate(
     row[4],
-    complaintsDataSheet.getSpreadsheetTimeZone(),
+    SpreadsheetApp.getActive().getSpreadsheetTimeZone(),
     "dd.MM.yyyy_HH:mm"
   );
   const channel = row[2];
@@ -92,7 +93,7 @@ function fillInComplaintDoc(complaintDoc, row) {
     // the time zone used for reading and the time zone of the spreadsheet
     Utilities.formatDate(
       row[4],
-      complaintsDataSheet.getSpreadsheetTimeZone(),
+      SpreadsheetApp.getActive().getSpreadsheetTimeZone(),
       "dd/MM/yyyy HH:mm:ss"
     )
   );
